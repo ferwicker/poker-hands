@@ -71,9 +71,9 @@ function getCardsObject(cards){
 }
 
 function checkConsecutive(x){
-    for (i=0; i<3; i++){
+    for (i=0; i<4; i++){
         var j = i + 1;
-        var diff = x[i].value - x[j].value; //breaks here after certain amount of times running, cant find second value
+        var diff = x[i].value - x[j].value;
         if(diff !== -1){
             consecutive = false;
             break
@@ -84,7 +84,7 @@ function checkConsecutive(x){
 }
 
 function checkSameSuit(x){
-    for (i=0; i<3; i++){
+    for (i=0; i<4; i++){
         var j = i + 1;
         if (x[i].suit !== x[j].suit){
             sameSuit = false;
@@ -249,6 +249,8 @@ function Pairs(x, index){ //checks for one or 2 pairs
         playerHands[index].handValue = 2;
         playerHands[index].highValue = pairs[0];
         playerHands[index].highCard = x[2].value; //highest remaining out of 3
+        playerHands[index].secondCard = x[1].value;
+        playerHands[index].thirdCard = x[0].value;
         return true
     } else {
         return false
