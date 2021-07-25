@@ -116,6 +116,36 @@ function StraightFlush(x, index){
     }
 }
 
+function FullHouse (x, index){ // use same method as pairs and threes - OK
+    let counter = 1;
+    let pair = 0; //would only be one of each so doesnt need array
+    let threes = 0;
+    for (i=0; i < 4; i++) {
+        if (x[i].value === x[i+1].value){
+            counter ++;
+            if (counter === 2) {
+                if (pair === 0) { //if pair is empty only
+                    pair = x[i].value
+                }
+            } if (counter === 3) {
+                threes = x[i].value;
+                if (pair === threes){
+                    pair = 0; //reset pair if it becomes three of a kind
+                }
+            }
+        } else {
+            counter = 1;
+        }
+    }
+    if (pair > 0 && threes > 0) {
+        //console.log('full house found!')
+        playerHands[index].handValue = 7;
+        playerHands[index].highValue = threes;
+        playerHands[index].highCard = pair;
+        return true
+    }
+}
+
 function Flush (x, index){
     if (consecutive === false && sameSuit === true) {
         playerHands[index].handValue = 6;
@@ -135,27 +165,6 @@ function Straight (x, index){
         return false
     }
 }
-
-// function ThreeOfAKind (x, index){ // old version
-//     if (x[0].value === x[1].value === x[2].value && x[3].value !== x[4].value) { // lower three are the same
-//         playerHands[index].handValue = 4;
-//         playerHands[index].highValue = x[0].value;
-//         playerHands[index].highCard = x[4].value;
-//         return true
-//     } else if (x[0].value !== x[1].value && x[2].value === x[3].value === x[4].value) { // higher three are the same
-//         playerHands[index].handValue = 4;
-//         playerHands[index].highValue = x[4].value;
-//         playerHands[index].highCard = x[1].value;
-//         return true
-//     } else if (x[0].value !== x[1].value && x[1].value === x[2].value === x[3].value && x[3].value !== x[4].value) { // middle cards same
-//         playerHands[index].handValue = 4;
-//         playerHands[index].highValue = x[2].value;
-//         playerHands[index].highCard = x[4].value;
-//         return true
-//     } else {
-//         return false
-//     }
-// }
 
 function ThreeOfAKind(x, index){ //same method as pairs
     let counter = 1;
