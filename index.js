@@ -136,14 +136,129 @@ function Straight (x, index){
     }
 }
 
-function checkHands(x){
+// function ThreeOfAKind (x, index){ // old version
+//     if (x[0].value === x[1].value === x[2].value && x[3].value !== x[4].value) { // lower three are the same
+//         playerHands[index].handValue = 4;
+//         playerHands[index].highValue = x[0].value;
+//         playerHands[index].highCard = x[4].value;
+//         return true
+//     } else if (x[0].value !== x[1].value && x[2].value === x[3].value === x[4].value) { // higher three are the same
+//         playerHands[index].handValue = 4;
+//         playerHands[index].highValue = x[4].value;
+//         playerHands[index].highCard = x[1].value;
+//         return true
+//     } else if (x[0].value !== x[1].value && x[1].value === x[2].value === x[3].value && x[3].value !== x[4].value) { // middle cards same
+//         playerHands[index].handValue = 4;
+//         playerHands[index].highValue = x[2].value;
+//         playerHands[index].highCard = x[4].value;
+//         return true
+//     } else {
+//         return false
+//     }
+// }
+
+function ThreeOfAKind(x, index){ //same method as pairs
+    let counter = 1;
+    const threes = [];
+    const removeIndex = [];
+    for (i=0; i < 4; i++) {
+        if (x[i].value === x[i+1].value){
+            counter ++;
+            if (counter === 3) {
+                threes.push(x[i].value);
+                removeIndex.push(i-1, i, i+1); //check
+            }
+        } else {
+            counter = 1;
+        }
+    }
+    for (i=4; i>= 0; i--){
+        if (removeIndex.includes(i)){
+            x.splice(i, 1);
+        }
+    }
+    if (threes.length > 0) {
+        playerHands[index].handValue = 4;
+        playerHands[index].highValue = threes[0];
+        playerHands[index].highCard = x[1].value; //highest of 2 remaining
+        return true
+    } else {
+        return false
+    }
+}
+
+function Pairs(x, index){ //checks for one or 2 pairs
+    let counter = 1;
+    const pairs = [];
+    const removeIndex = [];
+    for (i=0; i < 4; i++) {
+        if (x[i].value === x[i+1].value){
+            counter ++;
+            if (counter === 2) {
+                pairs.push(x[i].value);
+                removeIndex.push(i, i+1); //OK
+            }
+        } else {
+            counter = 1;
+        }
+    }
+    // remove paired cards from array, run for loop in reverse order
+    for (i=4; i>= 0; i--){
+        if (removeIndex.includes(i)){
+            x.splice(i, 1);
+        }
+    }
+
+    if (pairs.length === 2) {
+        playerHands[index].handValue = 3;
+        playerHands[index].highValue = pairs[1];
+        playerHands[index].lowValue = pairs[0];
+        playerHands[index].highCard = x[0].value; //value of remaining card
+        return true
+    } else if (pairs.length === 1) {
+        playerHands[index].handValue = 2;
+        playerHands[index].highValue = pairs[0];
+        playerHands[index].highCard = x[2].value; //highest remaining out of 3
+        return true
+    } else {
+        return false
+    }
+}
+
+function NoPair(x, index){
+    playerHands[index].handValue = 1;
+    playerHands[index].highValue = x[4].value;
+    return true
+}
+
+function checkHands(x){ //checks hands and assigns values
     x.forEach((element, index) => {
         playerHands.push({});
         let consecutive;
         let sameSuit;
         checkConsecutive(hand);
         checkSameSuit(hand);
-        // add hands check here switch statement
+        // check hands with switch statement
+        switch (true){
+            case RoyalFlush(hand, index):
+                break;
+            case StraightFlush(hand, index):
+                break;
+            case FourOfAKind(hand, index):
+                break;
+            case FullHouse(hand, index):
+                break;
+            case Flush(hand, index):
+                break;
+            case Straight(hand, index):
+                break;
+            case ThreeOfAKind(hand, index):
+                break;
+            case Pairs(hand,index):
+                break;
+            case NoPair(hand, index):
+                break;
+        }
     });
 }
 
