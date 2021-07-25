@@ -2,7 +2,8 @@ const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  terminal: true
 });
 
 let allGames = [];
@@ -256,6 +257,10 @@ function Pairs(x, index){ //checks for one or 2 pairs
 function NoPair(x, index){
     playerHands[index].handValue = 1;
     playerHands[index].highValue = x[4].value;
+    playerHands[index].highCard = x[3].value;
+    playerHands[index].secondCard = x[2].value;
+    playerHands[index].thirdCard = x[1].value;
+    playerHands[index].fourthCard = x[0].value;
     return true
 }
 
@@ -309,6 +314,15 @@ function tieBreaker(a, b){
         case (a.highCard && a.highCard !== b.highCard):
             simpleCompare(a.highCard, b.highCard);
             break;
+        case (a.secondCard && a.secondCard !== b.secondCard):
+            simpleCompare(a.secondCard, b.secondCard);
+            break;
+        case (a.thirdCard && a.thirdCard !== b.thirdCard):
+            simpleCompare(a.thirdCard, b.thirdCard);
+            break;
+        case (a.fourthCard && a.fourthCard !== b.fourthCard):
+            simpleCompare(a.fourthCard, b.fourthCard);
+            break;
         default:
             break;
     }
@@ -334,7 +348,7 @@ function init (games){
     })
     //log winners count
     process.stdout.write(`\n\nPlayer 1: ${playerOneCount} hands \nPlayer 2: ${playerTwoCount} hands\n`);
-    process.exit(); // add option to run again or exit?
+    process.exit(); 
 }
 
 rl.input.on('data', function(data){
@@ -342,3 +356,15 @@ rl.input.on('data', function(data){
     allGames = allData.split('\r');
     init(allGames);  
 });
+
+// var tempGame = []; // removing readline
+
+// process.stdin.on('data', function(data){
+//     var allData = data.toString().trim();
+//     tempGame = allData.split('\r');
+//     if (tempGame[0] === '') {
+//         init(allGames); 
+//     } else {
+//         allGames.push(tempGame[0]);
+//     }
+// });
