@@ -1,9 +1,10 @@
 const readline = require('readline');
+const fs = require('fs');
 
 const rl = readline.createInterface({
-  input: process.stdin,
+  input: fs.createReadStream('poker-hands.txt'),
   output: process.stdout,
-  terminal: true
+  console: false
 });
 
 let allGames = [];
@@ -351,20 +352,10 @@ function init (games){
     process.exit(); 
 }
 
-rl.input.on('data', function(data){
-    var allData = data.toString().trim();
-    allGames = allData.split('\r');
-    init(allGames);  
+rl.on('line', function(line) {
+    allGames.push(line);
 });
 
-// var tempGame = []; // removing readline
-
-// process.stdin.on('data', function(data){
-//     var allData = data.toString().trim();
-//     tempGame = allData.split('\r');
-//     if (tempGame[0] === '') {
-//         init(allGames); 
-//     } else {
-//         allGames.push(tempGame[0]);
-//     }
-// });
+rl.input.on('end', () => {
+    init(allGames); 
+})
