@@ -260,7 +260,7 @@ function NoPair(x, index){
 }
 
 function checkHands(x){ //checks hands and assigns values
-    x.forEach((element, index) => {
+    x.forEach((hand, index) => {
         playerHands.push({});
         let consecutive;
         let sameSuit;
@@ -290,21 +290,50 @@ function checkHands(x){ //checks hands and assigns values
     });
 }
 
-
-function getWinner(a,b){
-    //compare players hands and determine winner
-    //add to winner's count
+function simpleCompare (a,b) {
+    if (a > b) {
+        playerOneCount ++
+    } else {
+        playerTwoCount ++
+    };
 }
 
-function init (hands){
-    for (i=0; i<hands.length; i++){ //change to foreach
+function tieBreaker(a, b){
+    switch (true) {
+        case (a.highValue && a.highValue !== b.highValue): //if high value exists and is different
+            simpleCompare(a.highValue, b.highValue);
+            break;
+        case (a.lowValue && a.lowValue !== b.lowValue):
+            simpleCompare(a.lowValue, b.lowValue);
+            break;
+        case (a.highCard && a.highCard !== b.highCard):
+            simpleCompare(a.highCard, b.highCard);
+            break;
+        default:
+            break;
+    }
+}
+
+function getWinner(a, b){
+    if (a.handValue > b.handValue) {
+        playerOneCount ++
+    } else if (a.handValue < b.handValue) {
+        playerTwoCount ++
+    } else if (a.handValue === b.handValue) { //if they have same hand ranking
+        tieBreaker(a, b)
+    }
+}
+
+function init (games){
+    games.forEach((game) => {
         playerHands = [];
-        var cards = getCardsObject(hands[i]);
+        var cards = getCardsObject(game);
         separatePlayers(cards);
         checkHands(playerCards);
-    };
+        getWinner(playerHands[0], playerHands[1]);
+    })
     //log winners count
-    process.stdout.write('\n'); //just adding some padding
+    process.stdout.write(`\n\nPlayer 1: ${playerOneCount} hands \nPlayer 2: ${playerTwoCount} hands\n`);
     process.exit(); // add option to run again or exit?
 }
 
