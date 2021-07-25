@@ -116,6 +116,26 @@ function StraightFlush(x, index){
     }
 }
 
+function FourOfAKind (x, index){ //could use counter but theres only two options to return true here, so using simple comparison
+    if (x[0].value === x[1].value && 
+        x[0].value === x[2].value && 
+        x[0].value === x[3].value) {
+        playerHands[index].handValue = 8;
+        playerHands[index].highValue = x[0].value;
+        playerHands[index].highCard = x[4].value;
+        return true
+    } else if (x[1].value === x[2].value && 
+               x[1].value === x[3].value && 
+               x[1].value === x[4].value) {
+        playerHands[index].handValue = 8;
+        playerHands[index].highValue = x[4].value;
+        playerHands[index].highCard = x[0].value;
+        return true
+    } else {
+        return false
+    }
+}
+
 function FullHouse (x, index){ // use same method as pairs and threes - OK
     let counter = 1;
     let pair = 0; //would only be one of each so doesnt need array
@@ -138,7 +158,6 @@ function FullHouse (x, index){ // use same method as pairs and threes - OK
         }
     }
     if (pair > 0 && threes > 0) {
-        //console.log('full house found!')
         playerHands[index].handValue = 7;
         playerHands[index].highValue = threes;
         playerHands[index].highCard = pair;
